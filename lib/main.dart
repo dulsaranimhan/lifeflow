@@ -9,8 +9,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: '.env');
-  final url = dotenv.env['SUPABASE_URL'] ?? '';
-  final anonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+  final url = normalizeSupabaseUrl(dotenv.env['SUPABASE_URL'] ?? '');
+  final anonKey = (dotenv.env['SUPABASE_ANON_KEY'] ?? '').trim();
 
   if (url.isEmpty || anonKey.isEmpty) {
     runApp(const MissingConfigApp());
@@ -21,4 +21,12 @@ Future<void> main() async {
   await Supabase.initialize(url: url, publishableKey: anonKey);
 
   runApp(const ProviderScope(child: LifeFlowApp()));
+}
+
+/// Accepts common copy/paste mistakes (spaces, quotes, trailing slash,
+/// `/rest/v1` or `/auth/v1` suffix) and returns the bare project URL.
+String normalizeSupabaseUrl(String raw) {
+  var url = raw.trim().replaceAll(RegExp(r'''^["']|["']$'''), '');
+  url = url.replaceFirst(RegExp(r'/+(rest|auth)/v1/?$'), '');
+  return url.replaceFirst(RegExp(r'/+$'), '');
 }
