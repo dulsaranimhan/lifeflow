@@ -41,8 +41,9 @@ class Recommendation {
           ? null
           : DateTime.parse(map['leave_time'] as String).toLocal(),
       reason: (map['reason'] as String?) ?? '',
-      response:
-          response == null ? null : RecommendationResponse.values.byName(response),
+      response: response == null
+          ? null
+          : RecommendationResponse.values.byName(response),
     );
   }
 

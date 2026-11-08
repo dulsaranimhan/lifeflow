@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 
 /// Root widget of LifeFlow.
-class LifeFlowApp extends StatelessWidget {
+class LifeFlowApp extends ConsumerWidget {
   const LifeFlowApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
       title: 'LifeFlow',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      home: const Scaffold(
-        body: Center(child: Text('What should I do now?')),
-      ),
+      routerConfig: ref.watch(appRouterProvider),
     );
   }
 }

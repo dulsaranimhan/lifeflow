@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_router.dart';
 import '../data/auth_providers.dart';
 import 'auth_form_helpers.dart';
 
@@ -133,7 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     OutlinedButton(
                       onPressed: _loading
                           ? null
-                          : () => context.push('/register'),
+                          : () => context.push(AppRoutes.register),
                       child: const Text('Create an account'),
                     ),
                   ],
