@@ -7,7 +7,7 @@ import '../../auth/data/auth_providers.dart';
 import '../data/home_data.dart';
 import '../data/home_providers.dart';
 import 'widgets/greeting_header.dart';
-import 'widgets/recommendation_card.dart';
+import 'widgets/next_action_card.dart';
 
 /// S02 – Home: the "What should I do now?" dashboard.
 class HomeScreen extends ConsumerStatefulWidget {
@@ -94,11 +94,16 @@ class _HomeContent extends ConsumerWidget {
     return ListView(
       // Always scrollable so pull-to-refresh works on short content.
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
       children: [
         GreetingHeader(name: name, now: now),
-        const SizedBox(height: 20),
-        const RecommendationCard(),
+        const SizedBox(height: 28),
+        NextActionCard(
+          // TODO: open the recommendation details screen (08).
+          onOpen: () => ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Recommendation details coming soon')),
+          ),
+        ),
         // home-sections
       ],
     );
