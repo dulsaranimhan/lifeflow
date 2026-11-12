@@ -5,6 +5,7 @@ import '../../auth/data/auth_providers.dart';
 import '../data/home_data.dart';
 import '../data/home_providers.dart';
 import 'widgets/greeting_header.dart';
+import 'widgets/recommendation_card.dart';
 
 /// S02 – Home: the "What should I do now?" dashboard.
 class HomeScreen extends ConsumerStatefulWidget {
@@ -64,6 +65,8 @@ class _HomeContent extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
       children: [
         GreetingHeader(name: name, now: now),
+        const SizedBox(height: 20),
+        const RecommendationCard(),
         // home-sections
       ],
     );
