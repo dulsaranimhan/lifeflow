@@ -1,13 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../features/notifications/data/reminder_sync.dart';
 
 import '../theme/app_colors.dart';
 
 /// Bottom navigation shell: Home, Tasks, Calendar, Insights.
-class AppShell extends StatelessWidget {
+class AppShell extends ConsumerStatefulWidget {
   const AppShell({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
+
+  @override
+  ConsumerState<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends ConsumerState<AppShell> {
+  StatefulNavigationShell get navigationShell => widget.navigationShell;
+
+  @override
+  void initState() {
+    super.initState();
+    // Ask once the user is inside the app (Android 13+ shows a dialog).
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => ref.read(reminderServiceProvider).requestPermission(),
+    );
+  }
 
   void _onTap(int index) {
     navigationShell.goBranch(
@@ -19,6 +38,9 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Keep phone reminders up to date while the user is signed in.
+    ref.watch(reminderSyncProvider);
+
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: DecoratedBox(

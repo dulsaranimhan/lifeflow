@@ -21,6 +21,8 @@ class HomeData {
 
   int get bufferMin => profile?.travelBufferMin ?? 10;
 
+  int get reminderLeadMin => profile?.reminderLeadMin ?? 15;
+
   /// The first event today that has not started yet.
   Event? nextEvent(DateTime now) {
     for (final event in eventsToday) {
