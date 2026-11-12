@@ -5,8 +5,8 @@ const int prepareToLeaveThresholdMin = 10;
 
 /// leaveTime = event start − travel − buffer.
 ///
-/// Travel only counts when the event has a location and asks for travel to be
-/// considered; otherwise [travelMin] is ignored.
+/// Travel only counts when the event has a place (coordinates or a name) and
+/// asks for travel to be considered; otherwise [travelMin] is ignored.
 DateTime leaveTimeFor(
   Event event, {
   required int travelMin,
@@ -18,7 +18,7 @@ DateTime leaveTimeFor(
 
 /// The travel minutes that actually apply to [event].
 int effectiveTravelMin(Event event, int travelMin) {
-  if (!event.considerTravel || !event.hasLocation) return 0;
+  if (!event.considerTravel || !event.hasPlace) return 0;
   return travelMin < 0 ? 0 : travelMin;
 }
 

@@ -38,10 +38,12 @@ final homeNextEventProvider = Provider((ref) {
 /// Travel minutes to the next event (0 when travel does not apply).
 final homeTravelMinutesProvider = FutureProvider<int>((ref) {
   final event = ref.watch(homeNextEventProvider);
-  if (event == null || !event.considerTravel || !event.hasLocation) {
+  if (event == null || !event.considerTravel || !event.hasPlace) {
     return Future.value(0);
   }
-  return ref.watch(travelTimeServiceProvider).minutesTo(event.lat!, event.lng!);
+  return ref
+      .watch(travelTimeServiceProvider)
+      .minutesTo(lat: event.lat, lng: event.lng, place: event.locationName);
 });
 
 /// "What should I do now?" for the Home screen.

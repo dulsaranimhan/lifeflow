@@ -154,6 +154,24 @@ void main() {
   });
 
   group('travel', () {
+    test('a place name without coordinates still needs travel', () {
+      final result = recommend(
+        now: now,
+        tasks: [task('A')],
+        nextEvent: Event(
+          title: 'Lab',
+          startTime: DateTime(2026, 11, 12, 11, 0),
+          endTime: DateTime(2026, 11, 12, 12, 0),
+          locationName: 'Faculty of Science',
+          considerTravel: true,
+        ),
+        travelMin: 20,
+        bufferMin: 10,
+      );
+      expect(result.leaveTime, DateTime(2026, 11, 12, 10, 30));
+      expect(result.travelMin, 20);
+    });
+
     test('travel is ignored when the event has no location', () {
       final result = recommend(
         now: now,

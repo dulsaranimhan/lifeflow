@@ -33,6 +33,10 @@ class Event {
 
   bool get hasLocation => lat != null && lng != null;
 
+  /// True when there is somewhere to travel to: coordinates or a place name.
+  bool get hasPlace =>
+      hasLocation || (locationName?.trim().isNotEmpty ?? false);
+
   Duration get duration => endTime.difference(startTime);
 
   factory Event.fromMap(Map<String, dynamic> map) {
