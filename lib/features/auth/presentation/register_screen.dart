@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_router.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_logo.dart';
+import '../../../core/widgets/square_back_button.dart';
 import '../data/auth_providers.dart';
 import 'auth_form_helpers.dart';
+import 'widgets/auth_link_row.dart';
 
 /// Account creation screen.
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -67,12 +72,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Create an account')),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.fromLTRB(28, 16, 28, 24),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 420),
               child: Form(
@@ -80,6 +86,30 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const Row(
+                      children: [
+                        SquareBackButton(),
+                        SizedBox(width: 16),
+                        AppLogo(size: 36),
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+                    Text(
+                      'Create your\naccount',
+                      style: theme.textTheme.displaySmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        height: 1.15,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Plan your day and always know what to do next.',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: AppColors.muted,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
                     TextFormField(
                       key: const Key('register_name'),
                       controller: _nameController,
@@ -88,7 +118,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       textInputAction: TextInputAction.next,
                       validator: AuthValidators.name,
                       decoration: const InputDecoration(
-                        labelText: 'Name',
+                        hintText: 'Full name',
                         prefixIcon: Icon(Icons.person_outline),
                       ),
                     ),
@@ -101,8 +131,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       textInputAction: TextInputAction.next,
                       validator: AuthValidators.email,
                       decoration: const InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email_outlined),
+                        hintText: 'Email address',
+                        prefixIcon: Icon(Icons.mail_outline),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -114,7 +144,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       textInputAction: TextInputAction.next,
                       validator: AuthValidators.newPassword,
                       decoration: const InputDecoration(
-                        labelText: 'Password',
+                        hintText: 'Password',
                         prefixIcon: Icon(Icons.lock_outline),
                       ),
                     ),
@@ -127,7 +157,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       onFieldSubmitted: (_) => _register(),
                       validator: _confirmPassword,
                       decoration: const InputDecoration(
-                        labelText: 'Confirm password',
+                        hintText: 'Confirm password',
                         prefixIcon: Icon(Icons.lock_outline),
                       ),
                     ),
@@ -138,6 +168,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         loading: _loading,
                         label: 'Create account',
                       ),
+                    ),
+                    const SizedBox(height: 12),
+                    AuthLinkRow(
+                      question: 'Already have an account?',
+                      action: 'Log in',
+                      onTap: _loading
+                          ? null
+                          : () => context.go(AppRoutes.login),
                     ),
                   ],
                 ),
