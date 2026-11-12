@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
+import 'services/reminder_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,13 @@ Future<void> main() async {
 
   // The anon (or publishable) key is safe to ship in the client; RLS protects data.
   await Supabase.initialize(url: url, publishableKey: anonKey);
+
+  try {
+    await ReminderService.instance.init();
+  } catch (error) {
+    // Reminders are optional; the app still works without them.
+    debugPrint('Reminders unavailable: $error');
+  }
 
   runApp(const ProviderScope(child: LifeFlowApp()));
 }
