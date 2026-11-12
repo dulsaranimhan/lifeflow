@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_router.dart';
 import '../../auth/data/auth_providers.dart';
 import '../data/home_data.dart';
 import '../data/home_providers.dart';
 import 'widgets/greeting_header.dart';
 import 'widgets/next_action_card.dart';
+import 'widgets/priority_tasks_card.dart';
 import 'widgets/upcoming_event_card.dart';
 
 /// S02 – Home: the "What should I do now?" dashboard.
@@ -107,7 +110,11 @@ class _HomeContent extends ConsumerWidget {
         ),
         const SizedBox(height: 18),
         UpcomingEventCard(bufferMin: data.bufferMin),
-        // home-sections
+        const SizedBox(height: 18),
+        PriorityTasksCard(
+          tasks: data.pendingTasks,
+          onSeeAll: () => context.go(AppRoutes.tasks),
+        ),
       ],
     );
   }
