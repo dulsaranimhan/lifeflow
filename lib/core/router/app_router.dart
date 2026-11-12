@@ -8,12 +8,14 @@ import '../../features/auth/data/auth_providers.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/welcome_screen.dart';
+import '../../features/events/presentation/event_form_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/insights/presentation/insights_screen.dart';
 import '../../features/schedule/presentation/schedule_screen.dart';
 import '../../features/settings/presentation/profile_screen.dart';
 import '../../features/tasks/presentation/task_form_screen.dart';
 import '../../features/tasks/presentation/tasks_screen.dart';
+import '../models/event.dart';
 import '../models/task.dart';
 import '../widgets/app_shell.dart';
 
@@ -26,6 +28,8 @@ abstract final class AppRoutes {
   static const newTask = '/task/new';
   static const editTask = '/task/edit';
   static const schedule = '/schedule';
+  static const newEvent = '/event/new';
+  static const editEvent = '/event/edit';
   static const insights = '/insights';
   static const profile = '/profile';
 }
@@ -70,6 +74,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         redirect: (context, state) =>
             state.extra is Task ? null : AppRoutes.tasks,
         builder: (context, state) => TaskFormScreen(task: state.extra! as Task),
+      ),
+      GoRoute(
+        path: AppRoutes.newEvent,
+        builder: (context, state) => EventFormScreen(
+          initialDate: state.extra is DateTime
+              ? state.extra! as DateTime
+              : null,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.editEvent,
+        redirect: (context, state) =>
+            state.extra is Event ? null : AppRoutes.schedule,
+        builder: (context, state) =>
+            EventFormScreen(event: state.extra! as Event),
       ),
       GoRoute(
         path: AppRoutes.profile,
