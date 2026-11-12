@@ -9,7 +9,7 @@ abstract class TravelTimeService {
 
 /// Placeholder that always returns a fixed travel time.
 ///
-/// Hirushi will replace this with a real implementation (current location +
+/// To be replaced later with a real implementation (current location +
 /// Google Maps Routes API) in the events/services work.
 class FakeTravelTimeService implements TravelTimeService {
   const FakeTravelTimeService({this.minutes = 20});

@@ -76,13 +76,12 @@ lib/
 supabase/migrations/        # SQL to run in the Supabase SQL editor
 ```
 
-## Team ownership
+## Team
 
-| Member  | Folders / areas |
-|---------|-----------------|
-| Dulsara | `lib/core/`, `lib/features/auth/`, `lib/features/home/`, recommendation engine |
-| Esandu  | `lib/features/tasks/`, recommendation UI, `lib/features/schedule/` |
-| Hirushi | `lib/features/events/`, services, `lib/features/settings/` |
+For now Dulsara is building all screens and features in one stream, so the
+app stays consistent with the UI references in `docs/ui/`. Follow-up work
+(for example the real travel-time service) will be shared with Esandu and
+Hirushi later.
 
-Keep changes inside your own folders where possible and use small commits with
+Use small commits with
 conventional messages (`feat(tasks): …`, `fix(auth): …`, `chore(db): …`).
