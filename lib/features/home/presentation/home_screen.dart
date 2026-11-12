@@ -8,6 +8,7 @@ import '../data/home_data.dart';
 import '../data/home_providers.dart';
 import 'widgets/greeting_header.dart';
 import 'widgets/next_action_card.dart';
+import 'widgets/upcoming_event_card.dart';
 
 /// S02 – Home: the "What should I do now?" dashboard.
 class HomeScreen extends ConsumerStatefulWidget {
@@ -104,6 +105,8 @@ class _HomeContent extends ConsumerWidget {
             const SnackBar(content: Text('Recommendation details coming soon')),
           ),
         ),
+        const SizedBox(height: 18),
+        UpcomingEventCard(bufferMin: data.bufferMin),
         // home-sections
       ],
     );
