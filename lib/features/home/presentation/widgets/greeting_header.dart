@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/app_logo.dart';
+import '../../../../core/widgets/app_top_bar.dart';
 
 /// Logo + avatar row, "Good morning, Dulsara ☀️" and today's date.
 class GreetingHeader extends StatelessWidget {
@@ -33,13 +31,7 @@ class GreetingHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            const AppLogo(circle: true, icon: Icons.spa_outlined),
-            const Spacer(),
-            _Avatar(name: name),
-          ],
-        ),
+        const AppTopBar(),
         const SizedBox(height: 32),
         Text(
           firstName.isEmpty
@@ -59,42 +51,6 @@ class GreetingHeader extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _Avatar extends StatelessWidget {
-  const _Avatar({required this.name});
-
-  final String name;
-
-  @override
-  Widget build(BuildContext context) {
-    final initials = name
-        .trim()
-        .split(RegExp(r'\s+'))
-        .where((p) => p.isNotEmpty)
-        .take(2)
-        .map((p) => p[0].toUpperCase())
-        .join();
-    return Semantics(
-      button: true,
-      label: 'Profile',
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: () => context.push(AppRoutes.profile),
-        child: CircleAvatar(
-          radius: 26,
-          backgroundColor: AppColors.iconBox,
-          foregroundColor: AppColors.ink,
-          child: initials.isEmpty
-              ? const Icon(Icons.person_outline)
-              : Text(
-                  initials,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
-                ),
-        ),
-      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_top_bar.dart';
 import '../../../core/widgets/soft_card.dart';
 import '../../../core/widgets/square_back_button.dart';
 import '../../auth/data/auth_providers.dart';
@@ -102,12 +103,7 @@ class _ProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initials = name
-        .split(RegExp(r'\s+'))
-        .where((p) => p.isNotEmpty)
-        .take(2)
-        .map((p) => p[0].toUpperCase())
-        .join();
+    final initials = UserAvatarButton.initialsOf(name);
     return SizedBox(
       width: 140,
       height: 140,
