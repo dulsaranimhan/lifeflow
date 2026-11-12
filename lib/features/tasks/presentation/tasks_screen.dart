@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/models/task.dart';
+import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_top_bar.dart';
 import '../data/task_providers.dart';
@@ -78,6 +80,13 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
     final now = DateTime.now();
 
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.large(
+        heroTag: 'add_task',
+        tooltip: 'Add task',
+        onPressed: () => context.push(AppRoutes.newTask),
+        child: const Icon(Icons.add, size: 36),
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () => ref.refresh(tasksProvider.future),
@@ -164,6 +173,8 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
                           task: task,
                           now: now,
                           onToggle: () => _toggle(task),
+                          onTap: () =>
+                              context.push(AppRoutes.editTask, extra: task),
                         ),
                       ),
                     ),

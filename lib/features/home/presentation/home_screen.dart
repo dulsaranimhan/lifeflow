@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
 import '../../auth/data/auth_providers.dart';
+import '../../tasks/data/task_providers.dart';
 import '../data/home_data.dart';
 import '../data/home_providers.dart';
 import 'widgets/greeting_header.dart';
@@ -114,6 +115,17 @@ class _HomeContent extends ConsumerWidget {
         PriorityTasksCard(
           tasks: data.pendingTasks,
           onSeeAll: () => context.go(AppRoutes.tasks),
+          onToggle: (task) async {
+            try {
+              await ref.read(taskActionsProvider).toggleDone(task);
+            } catch (_) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Couldn't update the task.")),
+                );
+              }
+            }
+          },
         ),
       ],
     );

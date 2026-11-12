@@ -12,7 +12,9 @@ import '../../features/home/presentation/home_screen.dart';
 import '../../features/insights/presentation/insights_screen.dart';
 import '../../features/schedule/presentation/schedule_screen.dart';
 import '../../features/settings/presentation/profile_screen.dart';
+import '../../features/tasks/presentation/task_form_screen.dart';
 import '../../features/tasks/presentation/tasks_screen.dart';
+import '../models/task.dart';
 import '../widgets/app_shell.dart';
 
 abstract final class AppRoutes {
@@ -21,6 +23,8 @@ abstract final class AppRoutes {
   static const register = '/register';
   static const home = '/home';
   static const tasks = '/tasks';
+  static const newTask = '/task/new';
+  static const editTask = '/task/edit';
   static const schedule = '/schedule';
   static const insights = '/insights';
   static const profile = '/profile';
@@ -56,6 +60,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.register,
         builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.newTask,
+        builder: (context, state) => const TaskFormScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.editTask,
+        redirect: (context, state) =>
+            state.extra is Task ? null : AppRoutes.tasks,
+        builder: (context, state) => TaskFormScreen(task: state.extra! as Task),
       ),
       GoRoute(
         path: AppRoutes.profile,
