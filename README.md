@@ -25,6 +25,13 @@ In the Supabase dashboard open **SQL Editor** and run each file **in order**:
 > Tip: while developing you can turn off **Authentication → Providers → Email →
 > Confirm email** so new accounts can log in straight away.
 
+### Optional: demo data
+
+To try the Home screen before the Tasks and Events screens are built, register
+an account in the app, then open `supabase/seed_demo.sql`, change `demo_email`
+to that account's email and run the script in the SQL Editor. It adds 5 sample
+tasks and 2 events (dev only).
+
 ### 3. Configure the app
 
 ```bash
