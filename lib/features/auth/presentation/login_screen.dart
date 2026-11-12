@@ -77,17 +77,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     const SizedBox(height: 36),
                     Text(
                       'Good to\nsee you again',
-                      style: theme.textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.w700,
+                      style: theme.textTheme.headlineLarge?.copyWith(
+                        fontSize: 36,
                         height: 1.15,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       'Sign in to get back to your flow and make today count.',
-                      style: theme.textTheme.titleMedium?.copyWith(
+                      style: theme.textTheme.bodyLarge?.copyWith(
                         color: AppColors.muted,
-                        fontWeight: FontWeight.w400,
+                        fontSize: 17,
                       ),
                     ),
                     const SizedBox(height: 20),

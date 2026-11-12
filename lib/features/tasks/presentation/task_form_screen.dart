@@ -165,9 +165,9 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                           const SizedBox(height: 6),
                           Text(
                             'Break it down, get it done.',
-                            style: theme.textTheme.titleMedium?.copyWith(
+                            style: theme.textTheme.bodyLarge?.copyWith(
                               color: AppColors.muted,
-                              fontWeight: FontWeight.w400,
+                              fontSize: 17,
                             ),
                           ),
                         ],

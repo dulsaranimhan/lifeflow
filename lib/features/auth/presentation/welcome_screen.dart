@@ -35,17 +35,17 @@ class WelcomeScreen extends StatelessWidget {
                   Text(
                     'LifeFlow',
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.displaySmall?.copyWith(
-                      fontWeight: FontWeight.w700,
+                    style: theme.textTheme.headlineLarge?.copyWith(
+                      fontSize: 36,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'What should I do now?',
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.titleLarge?.copyWith(
+                    style: theme.textTheme.bodyLarge?.copyWith(
                       color: AppColors.muted,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 20,
                     ),
                   ),
                   const SizedBox(height: 32),

@@ -96,17 +96,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     const SizedBox(height: 32),
                     Text(
                       'Create your\naccount',
-                      style: theme.textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.w700,
+                      style: theme.textTheme.headlineLarge?.copyWith(
+                        fontSize: 36,
                         height: 1.15,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       'Plan your day and always know what to do next.',
-                      style: theme.textTheme.titleMedium?.copyWith(
+                      style: theme.textTheme.bodyLarge?.copyWith(
                         color: AppColors.muted,
-                        fontWeight: FontWeight.w400,
+                        fontSize: 17,
                       ),
                     ),
                     const SizedBox(height: 32),

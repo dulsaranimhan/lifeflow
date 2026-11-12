@@ -100,9 +100,9 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
               const SizedBox(height: 6),
               Text(
                 'Small steps. A calmer, happier you.',
-                style: theme.textTheme.titleMedium?.copyWith(
+                style: theme.textTheme.bodyLarge?.copyWith(
                   color: AppColors.muted,
-                  fontWeight: FontWeight.w400,
+                  fontSize: 17,
                 ),
               ),
               const SizedBox(height: 24),

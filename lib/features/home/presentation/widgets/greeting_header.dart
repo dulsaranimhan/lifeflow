@@ -45,9 +45,9 @@ class GreetingHeader extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           DateFormat('EEEE, MMMM d').format(now),
-          style: theme.textTheme.titleMedium?.copyWith(
+          style: theme.textTheme.bodyLarge?.copyWith(
             color: AppColors.muted,
-            fontWeight: FontWeight.w400,
+            fontSize: 17,
           ),
         ),
       ],

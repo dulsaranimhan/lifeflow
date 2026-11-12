@@ -187,9 +187,9 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
                 const SizedBox(height: 8),
                 Text(
                   "Capture what's on your mind\nand keep your day on track.",
-                  style: theme.textTheme.titleMedium?.copyWith(
+                  style: theme.textTheme.bodyLarge?.copyWith(
                     color: AppColors.muted,
-                    fontWeight: FontWeight.w400,
+                    fontSize: 17,
                   ),
                 ),
                 const SizedBox(height: 24),

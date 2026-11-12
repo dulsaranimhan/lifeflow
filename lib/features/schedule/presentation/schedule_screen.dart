@@ -87,9 +87,9 @@ class ScheduleScreen extends ConsumerWidget {
                         const SizedBox(height: 4),
                         Text(
                           "Let's make it a good day 💛",
-                          style: theme.textTheme.titleMedium?.copyWith(
+                          style: theme.textTheme.bodyLarge?.copyWith(
                             color: AppColors.muted,
-                            fontWeight: FontWeight.w400,
+                            fontSize: 17,
                           ),
                         ),
                       ],
