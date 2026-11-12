@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +18,36 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  static const _recalculateEvery = Duration(seconds: 60);
+
+  Timer? _timer;
+  late final AppLifecycleListener _lifecycle;
+
+  @override
+  void initState() {
+    super.initState();
+    // Data is loaded on open by homeDataProvider. After that:
+    // - every 60 s while Home is visible, recalculate with the new "now";
+    // - when the app comes back to the foreground, reload everything.
+    _timer = Timer.periodic(_recalculateEvery, (_) => _recalculate());
+    _lifecycle = AppLifecycleListener(onResume: _refresh);
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
+  /// Recalculates the recommendation with the current time (no network).
+  void _recalculate() {
+    if (!mounted) return;
+    // Skip while another tab is shown; the shell keeps Home alive offstage.
+    if (!(TickerMode.valuesOf(context).enabled)) return;
+    ref.read(homeClockProvider.notifier).tick();
+  }
+
   /// Reloads data from Supabase and recalculates the recommendation.
   Future<void> _refresh() async {
     ref.read(homeClockProvider.notifier).tick();
