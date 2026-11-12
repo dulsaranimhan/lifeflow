@@ -6,6 +6,8 @@ import '../../../core/widgets/app_top_bar.dart';
 import '../../../core/widgets/soft_card.dart';
 import '../../../core/widgets/square_back_button.dart';
 import '../../auth/data/auth_providers.dart';
+import '../data/profile_providers.dart';
+import 'widgets/minutes_picker_sheet.dart';
 
 /// 10 – Profile and settings (S08).
 class ProfileScreen extends ConsumerWidget {
@@ -28,11 +30,74 @@ class ProfileScreen extends ConsumerWidget {
       ..showSnackBar(SnackBar(content: Text(message)));
   }
 
+  Future<void> _editReminders(BuildContext context, WidgetRef ref) async {
+    final profile = await ref.read(profileProvider.future);
+    if (profile == null || !context.mounted) return;
+    final minutes = await showMinutesPicker(
+      context,
+      title: 'Notifications',
+      description: 'How long before a task is due should LifeFlow remind you?',
+      options: const [5, 10, 15, 30, 60],
+      current: profile.reminderLeadMin,
+    );
+    if (minutes == null || !context.mounted) return;
+    await _save(
+      context,
+      ref,
+      () => ref
+          .read(profileActionsProvider)
+          .save(profile.copyWith(reminderLeadMin: minutes)),
+      'Reminders will come $minutes min before tasks are due.',
+    );
+  }
+
+  Future<void> _editTravel(BuildContext context, WidgetRef ref) async {
+    final profile = await ref.read(profileProvider.future);
+    if (profile == null || !context.mounted) return;
+    final minutes = await showMinutesPicker(
+      context,
+      title: 'Travel preferences',
+      description:
+          'Extra buffer added on top of travel time when working out '
+          'when you should leave.',
+      options: const [0, 5, 10, 15, 20, 30],
+      current: profile.travelBufferMin,
+    );
+    if (minutes == null || !context.mounted) return;
+    await _save(
+      context,
+      ref,
+      () => ref
+          .read(profileActionsProvider)
+          .save(profile.copyWith(travelBufferMin: minutes)),
+      'Travel buffer set to $minutes min.',
+    );
+  }
+
+  Future<void> _save(
+    BuildContext context,
+    WidgetRef ref,
+    Future<void> Function() action,
+    String done,
+  ) async {
+    try {
+      await action();
+      if (context.mounted) _snack(context, done);
+    } catch (_) {
+      if (context.mounted) {
+        _snack(context, "Couldn't save your settings. Please try again.");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final user = ref.watch(currentUserProvider);
-    final name = (user?.userMetadata?['name'] as String?)?.trim() ?? '';
+    final profile = ref.watch(profileProvider).value;
+    final name = (profile?.name.isNotEmpty ?? false)
+        ? profile!.name.trim()
+        : (user?.userMetadata?['name'] as String?)?.trim() ?? '';
 
     void soon(String what) => _snack(context, '$what is coming soon');
 
@@ -62,8 +127,10 @@ class ProfileScreen extends ConsumerWidget {
             _SettingsTile(
               icon: Icons.notifications_none_rounded,
               title: 'Notifications',
-              subtitle: 'Manage reminders and alerts',
-              onTap: () => soon('Notification settings'),
+              subtitle: profile == null
+                  ? 'Manage reminders and alerts'
+                  : 'Remind me ${profile.reminderLeadMin} min before tasks',
+              onTap: () => _editReminders(context, ref),
             ),
             _SettingsTile(
               icon: Icons.schedule_rounded,
@@ -74,8 +141,10 @@ class ProfileScreen extends ConsumerWidget {
             _SettingsTile(
               icon: Icons.directions_walk_rounded,
               title: 'Travel preferences',
-              subtitle: 'Buffer time before events',
-              onTap: () => soon('Travel preferences'),
+              subtitle: profile == null
+                  ? 'Buffer time before events'
+                  : '${profile.travelBufferMin} min buffer before events',
+              onTap: () => _editTravel(context, ref),
             ),
             _SettingsTile(
               icon: Icons.eco_outlined,
