@@ -3,7 +3,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../services/travel_time_service.dart';
 import '../../auth/data/auth_providers.dart';
+import '../../recommendation/data/recommendation_providers.dart';
 import '../../recommendation/engine/recommendation_engine.dart';
+import '../../recommendation/engine/snooze.dart';
 import 'home_data.dart';
 import 'home_repository.dart';
 
@@ -53,9 +55,10 @@ final homeRecommendationProvider = FutureProvider<RecommendationResult>((
   final data = await ref.watch(homeDataProvider.future);
   final travelMin = await ref.watch(homeTravelMinutesProvider.future);
   final now = ref.watch(homeClockProvider);
+  final snoozed = ref.watch(snoozedTasksProvider);
   return recommend(
     now: now,
-    tasks: data.pendingTasks,
+    tasks: withoutSnoozed(data.pendingTasks, snoozed, now),
     nextEvent: data.nextEvent(now),
     travelMin: travelMin,
     bufferMin: data.bufferMin,
