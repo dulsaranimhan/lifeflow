@@ -5,22 +5,29 @@ import '../theme/app_colors.dart';
 
 /// Yellow rounded-square back button used in page headers.
 class SquareBackButton extends StatelessWidget {
-  const SquareBackButton({super.key, this.onPressed});
+  const SquareBackButton({
+    super.key,
+    this.onPressed,
+    this.color = AppColors.yellow,
+    this.icon = Icons.chevron_left,
+  });
 
   final VoidCallback? onPressed;
+  final Color color;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.yellow,
+      color: color,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
         onTap: onPressed ?? () => context.pop(),
-        child: const SizedBox(
+        child: SizedBox(
           width: 44,
           height: 44,
-          child: Icon(Icons.chevron_left, color: AppColors.ink),
+          child: Icon(icon, color: AppColors.ink),
         ),
       ),
     );
