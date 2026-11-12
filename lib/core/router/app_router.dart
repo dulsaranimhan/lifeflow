@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/data/auth_providers.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
+import '../../features/auth/presentation/welcome_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/schedule/presentation/schedule_screen.dart';
 import '../../features/settings/presentation/profile_screen.dart';
@@ -14,6 +15,7 @@ import '../../features/tasks/presentation/tasks_screen.dart';
 import '../widgets/app_shell.dart';
 
 abstract final class AppRoutes {
+  static const welcome = '/welcome';
   static const login = '/login';
   static const register = '/register';
   static const home = '/home';
@@ -22,7 +24,7 @@ abstract final class AppRoutes {
   static const profile = '/profile';
 }
 
-const _publicRoutes = {AppRoutes.login, AppRoutes.register};
+const _publicRoutes = {AppRoutes.welcome, AppRoutes.login, AppRoutes.register};
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final auth = ref.watch(authRepositoryProvider);
@@ -36,11 +38,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final loggedIn = auth.currentUser != null;
       final onPublicRoute = _publicRoutes.contains(state.matchedLocation);
 
-      if (!loggedIn && !onPublicRoute) return AppRoutes.login;
+      if (!loggedIn && !onPublicRoute) return AppRoutes.welcome;
       if (loggedIn && onPublicRoute) return AppRoutes.home;
       return null;
     },
     routes: [
+      GoRoute(
+        path: AppRoutes.welcome,
+        builder: (context, state) => const WelcomeScreen(),
+      ),
       GoRoute(
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
