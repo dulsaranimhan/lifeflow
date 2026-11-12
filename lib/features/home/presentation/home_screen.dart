@@ -110,7 +110,10 @@ class _HomeContent extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 18),
-        UpcomingEventCard(bufferMin: data.bufferMin),
+        UpcomingEventCard(
+          bufferMin: data.bufferMin,
+          onOpen: (event) => context.push(AppRoutes.editEvent, extra: event),
+        ),
         const SizedBox(height: 18),
         PriorityTasksCard(
           tasks: data.pendingTasks,

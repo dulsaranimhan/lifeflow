@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/models/event.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/soft_card.dart';
 import '../../../recommendation/engine/reason_text.dart';
@@ -9,10 +10,10 @@ import '../../data/home_providers.dart';
 
 /// White "UPCOMING EVENT" card with the leave-by time.
 class UpcomingEventCard extends ConsumerWidget {
-  const UpcomingEventCard({super.key, required this.bufferMin, this.onTap});
+  const UpcomingEventCard({super.key, required this.bufferMin, this.onOpen});
 
   final int bufferMin;
-  final VoidCallback? onTap;
+  final ValueChanged<Event>? onOpen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,7 +47,7 @@ class UpcomingEventCard extends ConsumerWidget {
 
     return SoftCard(
       key: const Key('upcoming_event_card'),
-      onTap: event == null ? null : onTap,
+      onTap: event == null || onOpen == null ? null : () => onOpen!(event),
       child: Row(
         children: [
           const IconBox(child: Text('📅', style: TextStyle(fontSize: 28))),
