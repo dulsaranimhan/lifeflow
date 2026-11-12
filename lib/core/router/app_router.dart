@@ -9,6 +9,7 @@ import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/welcome_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/insights/presentation/insights_screen.dart';
 import '../../features/schedule/presentation/schedule_screen.dart';
 import '../../features/settings/presentation/profile_screen.dart';
 import '../../features/tasks/presentation/tasks_screen.dart';
@@ -21,6 +22,7 @@ abstract final class AppRoutes {
   static const home = '/home';
   static const tasks = '/tasks';
   static const schedule = '/schedule';
+  static const insights = '/insights';
   static const profile = '/profile';
 }
 
@@ -55,6 +57,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.register,
         builder: (context, state) => const RegisterScreen(),
       ),
+      GoRoute(
+        path: AppRoutes.profile,
+        builder: (context, state) => const ProfileScreen(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             AppShell(navigationShell: navigationShell),
@@ -62,7 +68,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           _branch(AppRoutes.home, const HomeScreen()),
           _branch(AppRoutes.tasks, const TasksScreen()),
           _branch(AppRoutes.schedule, const ScheduleScreen()),
-          _branch(AppRoutes.profile, const ProfileScreen()),
+          _branch(AppRoutes.insights, const InsightsScreen()),
         ],
       ),
     ],
