@@ -1,37 +1,35 @@
 import 'package:flutter/material.dart';
 
-/// Brand colours for LifeFlow.
-abstract final class AppColors {
-  static const Color navy = Color(0xFF1F3A5F);
-  static const Color teal = Color(0xFF2E7D6B);
-}
+import 'app_colors.dart';
+
+export 'app_colors.dart';
 
 /// Material 3 theme used across the app.
 abstract final class AppTheme {
   static ThemeData get light {
     final scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.navy,
-      primary: AppColors.navy,
-      secondary: AppColors.teal,
+      seedColor: AppColors.yellow,
+      primary: AppColors.yellow,
+      onPrimary: AppColors.ink,
+      secondary: AppColors.amber,
+      onSecondary: AppColors.ink,
+      surface: AppColors.background,
+      onSurface: AppColors.ink,
+      onSurfaceVariant: AppColors.muted,
+      error: AppColors.danger,
     );
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      appBarTheme: AppBarTheme(
-        backgroundColor: scheme.surface,
-        foregroundColor: scheme.primary,
-        centerTitle: true,
+      scaffoldBackgroundColor: AppColors.background,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.background,
+        foregroundColor: AppColors.ink,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
       ),
-      inputDecorationTheme: const InputDecorationTheme(
-        border: OutlineInputBorder(),
-      ),
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-      ),
+      dividerColor: AppColors.divider,
     );
   }
 }
