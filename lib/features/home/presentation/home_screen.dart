@@ -103,12 +103,7 @@ class _HomeContent extends ConsumerWidget {
       children: [
         GreetingHeader(name: name, now: now),
         const SizedBox(height: 28),
-        NextActionCard(
-          // TODO: open the recommendation details screen (08).
-          onOpen: () => ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Recommendation details coming soon')),
-          ),
-        ),
+        NextActionCard(onOpen: () => context.push(AppRoutes.recommendation)),
         const SizedBox(height: 18),
         UpcomingEventCard(
           bufferMin: data.bufferMin,

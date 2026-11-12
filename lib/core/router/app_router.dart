@@ -11,6 +11,7 @@ import '../../features/auth/presentation/welcome_screen.dart';
 import '../../features/events/presentation/event_form_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/insights/presentation/insights_screen.dart';
+import '../../features/recommendation/presentation/recommendation_screen.dart';
 import '../../features/schedule/presentation/schedule_screen.dart';
 import '../../features/settings/presentation/profile_screen.dart';
 import '../../features/tasks/presentation/task_form_screen.dart';
@@ -32,6 +33,7 @@ abstract final class AppRoutes {
   static const editEvent = '/event/edit';
   static const insights = '/insights';
   static const profile = '/profile';
+  static const recommendation = '/recommendation';
 }
 
 const _publicRoutes = {AppRoutes.welcome, AppRoutes.login, AppRoutes.register};
@@ -89,6 +91,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             state.extra is Event ? null : AppRoutes.schedule,
         builder: (context, state) =>
             EventFormScreen(event: state.extra! as Event),
+      ),
+      GoRoute(
+        path: AppRoutes.recommendation,
+        builder: (context, state) => const RecommendationScreen(),
       ),
       GoRoute(
         path: AppRoutes.profile,
