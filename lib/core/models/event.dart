@@ -11,6 +11,7 @@ class Event {
     this.lng,
     this.considerTravel = false,
     this.reminderMin = 15,
+    this.notes,
   });
 
   final String? id;
@@ -28,6 +29,8 @@ class Event {
   /// Minutes before [startTime] to remind the user.
   final int reminderMin;
 
+  final String? notes;
+
   bool get hasLocation => lat != null && lng != null;
 
   Duration get duration => endTime.difference(startTime);
@@ -44,6 +47,7 @@ class Event {
       lng: (map['lng'] as num?)?.toDouble(),
       considerTravel: (map['consider_travel'] as bool?) ?? false,
       reminderMin: (map['reminder_min'] as num?)?.toInt() ?? 15,
+      notes: map['notes'] as String?,
     );
   }
 
@@ -59,6 +63,33 @@ class Event {
       'lng': lng,
       'consider_travel': considerTravel,
       'reminder_min': reminderMin,
+      'notes': notes,
     };
+  }
+
+  Event copyWith({
+    String? title,
+    DateTime? startTime,
+    DateTime? endTime,
+    String? locationName,
+    double? lat,
+    double? lng,
+    bool? considerTravel,
+    int? reminderMin,
+    String? notes,
+  }) {
+    return Event(
+      id: id,
+      userId: userId,
+      title: title ?? this.title,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      locationName: locationName ?? this.locationName,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
+      considerTravel: considerTravel ?? this.considerTravel,
+      reminderMin: reminderMin ?? this.reminderMin,
+      notes: notes ?? this.notes,
+    );
   }
 }
