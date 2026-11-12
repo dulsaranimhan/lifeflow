@@ -1,10 +1,10 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_logo.dart';
+import 'widgets/auth_link_row.dart';
 
 /// 01 – Welcome: first screen for signed-out users.
 class WelcomeScreen extends StatelessWidget {
@@ -62,23 +62,10 @@ class WelcomeScreen extends StatelessWidget {
                     child: const Text('Get Started'),
                   ),
                   const SizedBox(height: 20),
-                  Text.rich(
-                    TextSpan(
-                      text: 'Already have an account?  ',
-                      style: theme.textTheme.bodyMedium,
-                      children: [
-                        TextSpan(
-                          text: 'Log in',
-                          style: const TextStyle(
-                            color: AppColors.amber,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => context.push(AppRoutes.login),
-                        ),
-                      ],
-                    ),
-                    textAlign: TextAlign.center,
+                  AuthLinkRow(
+                    question: 'Already have an account?',
+                    action: 'Log in',
+                    onTap: () => context.push(AppRoutes.login),
                   ),
                 ],
               ),

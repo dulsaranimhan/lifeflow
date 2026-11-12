@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_logo.dart';
 import '../data/auth_providers.dart';
 import 'auth_form_helpers.dart';
+import 'widgets/auth_link_row.dart';
 
-/// S01 – Login.
+/// 02 – Login (S01).
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -47,6 +50,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  void _forgotPassword() {
+    showAuthSnackBar(context, 'Password reset is coming soon.');
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -55,7 +62,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.fromLTRB(28, 24, 28, 24),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 420),
               child: Form(
@@ -63,29 +70,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Icon(
-                      Icons.bolt_rounded,
-                      size: 72,
-                      color: theme.colorScheme.primary,
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: AppLogo(),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 36),
                     Text(
-                      'LifeFlow',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.headlineLarge?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+                      'Good to\nsee you again',
+                      style: theme.textTheme.displaySmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        height: 1.15,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 12),
                     Text(
-                      'What should I do now?',
-                      textAlign: TextAlign.center,
+                      'Sign in to get back to your flow and make today count.',
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.secondary,
+                        color: AppColors.muted,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 20),
+                    Image.asset(
+                      'assets/images/login_illustration.png',
+                      height: 170,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 24),
                     TextFormField(
                       key: const Key('login_email'),
                       controller: _emailController,
@@ -94,8 +105,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       textInputAction: TextInputAction.next,
                       validator: AuthValidators.email,
                       decoration: const InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email_outlined),
+                        hintText: 'Email address',
+                        prefixIcon: Icon(Icons.mail_outline),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -108,7 +119,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onFieldSubmitted: (_) => _logIn(),
                       validator: AuthValidators.loginPassword,
                       decoration: InputDecoration(
-                        labelText: 'Password',
+                        hintText: 'Password',
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           tooltip: _obscurePassword
@@ -125,17 +136,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: _forgotPassword,
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.ink,
+                        ),
+                        child: const Text(
+                          'Forgot password?',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     FilledButton(
                       onPressed: _loading ? null : _logIn,
-                      child: LoadingLabel(loading: _loading, label: 'Log in'),
+                      child: LoadingLabel(loading: _loading, label: 'Sign In'),
                     ),
                     const SizedBox(height: 12),
-                    OutlinedButton(
-                      onPressed: _loading
+                    AuthLinkRow(
+                      question: "Don't have an account?",
+                      action: 'Create account',
+                      onTap: _loading
                           ? null
                           : () => context.push(AppRoutes.register),
-                      child: const Text('Create an account'),
                     ),
                   ],
                 ),
