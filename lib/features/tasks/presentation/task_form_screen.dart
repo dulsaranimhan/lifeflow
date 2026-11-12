@@ -139,173 +139,178 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
       body: SafeArea(
         child: Form(
           key: _formKey,
-          child: ListView(
+          // Not a lazy ListView: every field must stay built so the form
+          // validates fields that are scrolled off-screen.
+          child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SquareBackButton(
-                          color: AppColors.iconBox,
-                          icon: Icons.arrow_back,
-                        ),
-                        const SizedBox(height: 28),
-                        Text(
-                          _editing ? 'Edit Task' : 'Add Task',
-                          style: theme.textTheme.headlineLarge,
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'Break it down, get it done.',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: AppColors.muted,
-                            fontWeight: FontWeight.w400,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SquareBackButton(
+                            color: AppColors.iconBox,
+                            icon: Icons.arrow_back,
+                          ),
+                          const SizedBox(height: 28),
+                          Text(
+                            _editing ? 'Edit Task' : 'Add Task',
+                            style: theme.textTheme.headlineLarge,
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            'Break it down, get it done.',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: AppColors.muted,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Image.asset(
+                      'assets/images/add_task_illustration.png',
+                      width: 130,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                FormSection(
+                  icon: Icons.description_outlined,
+                  label: 'Task title',
+                  child: TextFormField(
+                    key: const Key('task_title'),
+                    controller: _title,
+                    textCapitalization: TextCapitalization.sentences,
+                    maxLength: 100,
+                    decoration: const InputDecoration(
+                      hintText: 'e.g. Finish design slides',
+                      counterText: '',
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    validator: (v) => (v == null || v.trim().isEmpty)
+                        ? 'Please enter a task title'
+                        : null,
+                  ),
+                ),
+                FormSection(
+                  icon: Icons.calendar_today_outlined,
+                  label: 'Due date',
+                  onTap: _pickDate,
+                  trailing: const Icon(Icons.keyboard_arrow_down),
+                  child: Row(
+                    children: [
+                      FormValue(DateFormat('EEE, MMM d, y').format(_deadline)),
+                      const SizedBox(width: 12),
+                      ActionChip(
+                        label: Text(DateFormat('h:mm a').format(_deadline)),
+                        avatar: const Icon(Icons.schedule, size: 18),
+                        onPressed: _pickTime,
+                        shape: const StadiumBorder(),
+                        side: BorderSide.none,
+                        backgroundColor: AppColors.field,
+                      ),
+                    ],
+                  ),
+                ),
+                FormSection(
+                  icon: Icons.schedule,
+                  label: 'Estimated duration',
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<int>(
+                      key: const Key('task_duration'),
+                      value: _duration,
+                      isExpanded: true,
+                      isDense: true,
+                      borderRadius: BorderRadius.circular(16),
+                      style: theme.textTheme.titleMedium,
+                      items: [
+                        for (final m in durations)
+                          DropdownMenuItem(
+                            value: m,
+                            child: Text(durationLabel(m)),
+                          ),
+                      ],
+                      onChanged: (v) => setState(() => _duration = v!),
+                    ),
+                  ),
+                ),
+                FormSection(
+                  icon: Icons.flag_outlined,
+                  label: 'Priority',
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final p in TaskPriority.values.reversed)
+                        PillChoice(
+                          label: p.label,
+                          selected: _priority == p,
+                          onTap: () => setState(() => _priority = p),
+                          leading: CircleAvatar(
+                            radius: 6,
+                            backgroundColor: p.dot,
                           ),
                         ),
-                      ],
-                    ),
+                    ],
                   ),
-                  Image.asset(
-                    'assets/images/add_task_illustration.png',
-                    width: 130,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              FormSection(
-                icon: Icons.description_outlined,
-                label: 'Task title',
-                child: TextFormField(
-                  key: const Key('task_title'),
-                  controller: _title,
-                  textCapitalization: TextCapitalization.sentences,
-                  maxLength: 100,
-                  decoration: const InputDecoration(
-                    hintText: 'e.g. Finish design slides',
-                    counterText: '',
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(14)),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  validator: (v) => (v == null || v.trim().isEmpty)
-                      ? 'Please enter a task title'
-                      : null,
                 ),
-              ),
-              FormSection(
-                icon: Icons.calendar_today_outlined,
-                label: 'Due date',
-                onTap: _pickDate,
-                trailing: const Icon(Icons.keyboard_arrow_down),
-                child: Row(
-                  children: [
-                    FormValue(DateFormat('EEE, MMM d, y').format(_deadline)),
-                    const SizedBox(width: 12),
-                    ActionChip(
-                      label: Text(DateFormat('h:mm a').format(_deadline)),
-                      avatar: const Icon(Icons.schedule, size: 18),
-                      onPressed: _pickTime,
-                      shape: const StadiumBorder(),
-                      side: BorderSide.none,
-                      backgroundColor: AppColors.field,
-                    ),
-                  ],
-                ),
-              ),
-              FormSection(
-                icon: Icons.schedule,
-                label: 'Estimated duration',
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<int>(
-                    key: const Key('task_duration'),
-                    value: _duration,
-                    isExpanded: true,
-                    isDense: true,
-                    borderRadius: BorderRadius.circular(16),
-                    style: theme.textTheme.titleMedium,
-                    items: [
-                      for (final m in durations)
-                        DropdownMenuItem(
-                          value: m,
-                          child: Text(durationLabel(m)),
+                FormSection(
+                  icon: Icons.folder_outlined,
+                  label: 'Category',
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final c in TaskCategory.values)
+                        PillChoice(
+                          label: c.label,
+                          selected: _category == c,
+                          onTap: () => setState(() => _category = c),
+                          leading: Icon(c.icon, size: 18, color: AppColors.ink),
                         ),
                     ],
-                    onChanged: (v) => setState(() => _duration = v!),
                   ),
                 ),
-              ),
-              FormSection(
-                icon: Icons.flag_outlined,
-                label: 'Priority',
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final p in TaskPriority.values.reversed)
-                      PillChoice(
-                        label: p.label,
-                        selected: _priority == p,
-                        onTap: () => setState(() => _priority = p),
-                        leading: CircleAvatar(
-                          radius: 6,
-                          backgroundColor: p.dot,
-                        ),
+                FormSection(
+                  icon: Icons.edit_outlined,
+                  label: 'Notes (optional)',
+                  child: TextFormField(
+                    key: const Key('task_notes'),
+                    controller: _notes,
+                    maxLines: 3,
+                    maxLength: 500,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: const InputDecoration(
+                      hintText: 'Add any extra details, links or steps...',
+                      contentPadding: EdgeInsets.all(16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                        borderSide: BorderSide.none,
                       ),
-                  ],
-                ),
-              ),
-              FormSection(
-                icon: Icons.folder_outlined,
-                label: 'Category',
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final c in TaskCategory.values)
-                      PillChoice(
-                        label: c.label,
-                        selected: _category == c,
-                        onTap: () => setState(() => _category = c),
-                        leading: Icon(c.icon, size: 18, color: AppColors.ink),
-                      ),
-                  ],
-                ),
-              ),
-              FormSection(
-                icon: Icons.edit_outlined,
-                label: 'Notes (optional)',
-                child: TextFormField(
-                  key: const Key('task_notes'),
-                  controller: _notes,
-                  maxLines: 3,
-                  maxLength: 500,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: const InputDecoration(
-                    hintText: 'Add any extra details, links or steps...',
-                    contentPadding: EdgeInsets.all(16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(14)),
-                      borderSide: BorderSide.none,
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              FilledButton(
-                key: const Key('task_save'),
-                onPressed: _saving ? null : _save,
-                child: LoadingLabel(loading: _saving, label: 'Save task'),
-              ),
-            ],
+                const SizedBox(height: 8),
+                FilledButton(
+                  key: const Key('task_save'),
+                  onPressed: _saving ? null : _save,
+                  child: LoadingLabel(loading: _saving, label: 'Save task'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
