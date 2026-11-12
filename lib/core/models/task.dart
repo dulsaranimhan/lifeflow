@@ -2,6 +2,8 @@ enum TaskPriority { high, medium, low }
 
 enum TaskStatus { pending, done }
 
+enum TaskCategory { work, personal, health, learning }
+
 /// A to-do item (`tasks` table).
 class Task {
   const Task({
@@ -13,6 +15,8 @@ class Task {
     this.durationMin = 30,
     this.status = TaskStatus.pending,
     this.reminderOn = true,
+    this.category = TaskCategory.personal,
+    this.notes,
   });
 
   /// Null until the row is inserted.
@@ -26,6 +30,8 @@ class Task {
   final int durationMin;
   final TaskStatus status;
   final bool reminderOn;
+  final TaskCategory category;
+  final String? notes;
 
   bool get isDone => status == TaskStatus.done;
 
@@ -45,6 +51,10 @@ class Task {
         (map['status'] as String?) ?? TaskStatus.pending.name,
       ),
       reminderOn: (map['reminder_on'] as bool?) ?? true,
+      category: TaskCategory.values.byName(
+        (map['category'] as String?) ?? TaskCategory.personal.name,
+      ),
+      notes: map['notes'] as String?,
     );
   }
 
@@ -59,6 +69,8 @@ class Task {
       'duration_min': durationMin,
       'status': status.name,
       'reminder_on': reminderOn,
+      'category': category.name,
+      'notes': notes,
     };
   }
 
@@ -69,6 +81,8 @@ class Task {
     int? durationMin,
     TaskStatus? status,
     bool? reminderOn,
+    TaskCategory? category,
+    String? notes,
   }) {
     return Task(
       id: id,
@@ -79,6 +93,8 @@ class Task {
       durationMin: durationMin ?? this.durationMin,
       status: status ?? this.status,
       reminderOn: reminderOn ?? this.reminderOn,
+      category: category ?? this.category,
+      notes: notes ?? this.notes,
     );
   }
 }
