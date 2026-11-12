@@ -23,6 +23,21 @@ final weekEventsProvider = FutureProvider.family<List<Event>, DateTime>((
       .fetchBetween(start, start.add(const Duration(days: 7)));
 });
 
+/// Events from yesterday until a week from today (notifications and
+/// reminders).
+final upcomingEventsProvider = FutureProvider<List<Event>>((ref) {
+  final user = ref.watch(currentUserProvider);
+  if (user == null) return Future.value(const []);
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  return ref
+      .watch(eventRepositoryProvider)
+      .fetchBetween(
+        today.subtract(const Duration(days: 1)),
+        today.add(const Duration(days: 8)),
+      );
+});
+
 /// Sunday 00:00 of the week containing [day].
 DateTime startOfWeek(DateTime day) {
   final date = DateTime(day.year, day.month, day.day);
@@ -55,6 +70,7 @@ class EventActions {
 
   void _refresh() {
     _ref.invalidate(weekEventsProvider);
+    _ref.invalidate(upcomingEventsProvider);
     _ref.invalidate(homeDataProvider);
   }
 }
