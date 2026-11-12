@@ -13,11 +13,21 @@ class AppTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        AppLogo(circle: true, icon: Icons.spa_outlined),
-        Spacer(),
-        UserAvatarButton(),
+        const AppLogo(circle: true, icon: Icons.spa_outlined),
+        const Spacer(),
+        Material(
+          color: AppColors.iconBox,
+          shape: const CircleBorder(),
+          child: IconButton(
+            tooltip: 'Notifications',
+            onPressed: () => context.push(AppRoutes.notifications),
+            icon: const Icon(Icons.notifications_none_rounded),
+          ),
+        ),
+        const SizedBox(width: 10),
+        const UserAvatarButton(),
       ],
     );
   }
